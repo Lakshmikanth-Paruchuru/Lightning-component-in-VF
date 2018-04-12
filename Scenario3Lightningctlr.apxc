@@ -1,0 +1,15 @@
+public class Scenario3Lightningctlr {
+    public string accID{get;set;}
+    public Scenario3Lightningctlr(Apexpages.StandardController controller){
+        accID = Apexpages.currentPage().getParameters().get('ID');
+        system.debug('Account Id is::'+accID);
+    }
+    @AuraEnabled
+    public static string saveContact(Contact objCon){
+        string retID ='';
+        if(objCon!=null)
+        Insert objCon;
+        retId = objCon.Id;
+        return retID;
+    }
+}

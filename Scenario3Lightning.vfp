@@ -1,0 +1,12 @@
+<apex:page standardController="Account" extensions="Scenario3Lightningctlr">
+    <apex:includeLightning />
+    <div id="light"/>
+    <script>
+    $Lightning.use("c:Scenario3LightningApp",function(){
+        $Lightning.createComponent("c:Scenario3Lightning",{
+            accID : '{!accID}'
+        },"light", function(component){}                                   
+                                  );
+    });    
+    </script>
+</apex:page>

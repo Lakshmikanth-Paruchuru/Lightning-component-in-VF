@@ -1,0 +1,58 @@
+//Scenario3LightningApp.app
+<aura:application extends="ltng:outApp">
+    <aura:dependency resource="c:Scenario3Lightning"/>
+</aura:application>
+
+
+
+//Scenario3Lightning.cmp
+<aura:component controller="Scenario3Lightningctlr" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="accID" type="string"/>
+    <aura:attribute name="objCon" type="Contact" default="{'sObjectType':'Contact'}"/>
+    <div class="slds-page-header">
+    Create contact
+    </div>
+   
+        <lightning:input value="{!v.objCon.AssistantName}" label="Enter name"/>
+        <lightning:input value="{!v.objCon.LastName}" label="Enter Last name"/>
+        <lightning:input type="email" value="{!v.objCon.Email}" label="Enter Email"/>
+        <lightning:input type="date" value="{!v.objCon.Birthdate}" label="Birthdate"/>
+        <lightning:button label="Create Contact" onclick="{!c.handleClick}"/>
+</aura:component>
+
+
+
+//Scenario3LightningController.js
+({
+	handleClick : function(component, event, helper) {
+		var getContact = component.get("v.objCon");
+        var action = component.get("c.saveContact");
+        action.setParams({
+            'objCon' : getContact
+        });
+        
+        action.setCallback(this, function(response){
+            var state = response.getState();
+            var returnId = response.getReturnValue();
+            if(state == 'SUCCESS'){
+                window.open('/'+returnId);
+            }
+        });
+        $A.enqueueAction(action);
+	}
+})
+
+
+//Scenario3Lightning.vfp
+<apex:page standardController="Account" extensions="Scenario3Lightningctlr">
+    <apex:includeLightning />
+    <div id="light"/>
+    <script>
+    $Lightning.use("c:Scenario3LightningApp",function(){
+        $Lightning.createComponent("c:Scenario3Lightning",{
+            accID : '{!accID}'
+        },"light", function(component){}                                   
+                                  );
+    });    
+    </script>
+</apex:page>
